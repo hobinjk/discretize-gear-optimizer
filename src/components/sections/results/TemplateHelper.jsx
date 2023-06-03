@@ -46,7 +46,16 @@ const TemplateHelper = ({ character }) => {
           const permalink = url.split('/').slice(-1);
           if (!permalink) return;
           console.log('loading data from dps.report...');
-          const response = await fetch(`https://dps.report/getJson?permalink=${permalink}`);
+          let apiUrl = '';
+          if (url.includes('dps.report')) {
+            apiUrl = `https://dps.report/getJson?permalink=${permalink}`;
+          } else if (url.includes('gw2wingman')) {
+            apiUrl = `https://gw2wingman.nevermindcreations.de/api/getJson/${permalink}`;
+          } else {
+            setUrlResult('Unknown url origin');
+            return;
+          }
+          const response = await fetch(apiUrl);
           const data = await response.json();
           console.log('got data from dps.report: ', data);
 
